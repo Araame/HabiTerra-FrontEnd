@@ -3,9 +3,8 @@ import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors } from "../../shared/theme";
 
-
 // Bottom bar widget
-export default function TenantBottomBar({ state, descriptors, navigation }) {
+export default function BottomBar({ state, descriptors, navigation }) {
   const insets = useSafeAreaInsets();
 
   return (
@@ -43,19 +42,25 @@ export default function TenantBottomBar({ state, descriptors, navigation }) {
               accessibilityState={{ selected: active }}
               accessibilityLabel={options.tabBarAccessibilityLabel ?? label}
               onPress={onPress}
-              onLongPress={() => navigation.emit({ type: "tabLongPress", target: route.key })}
-              className="h-full flex-1 items-center justify-center rounded-full active:opacity-60">
+              onLongPress={() =>
+                navigation.emit({ type: "tabLongPress", target: route.key })
+              }
+              className="h-full flex-1 items-center justify-center rounded-full active:opacity-60"
+            >
               <View
-                className={`h-8 w-12 items-center justify-center rounded-full ${active ? "bg-primarySoft" : "bg-transparent"}`}>
+                className={`h-8 w-12 items-center justify-center rounded-full ${active ? "bg-primarySoft" : "bg-transparent"}`}
+              >
                 <Ionicons
-                  name={options.tenantIcon}
+                  name={options.tabBarIconName}
                   size={23}
-                  color={active ? colors.primary : colors.muted}/>
+                  color={active ? colors.primary : colors.muted}
+                />
               </View>
               <Text
                 maxFontSizeMultiplier={1.2}
                 numberOfLines={1}
-                className={`mt-1 font-medium text-[11px] ${active ? "text-primary" : "text-muted"}`}>
+                className={`mt-1 font-medium text-[11px] ${active ? "text-primary" : "text-muted"}`}
+              >
                 {label}
               </Text>
             </Pressable>

@@ -2,7 +2,7 @@ import "./global.css";
 import { StatusBar } from "expo-status-bar";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import TenantNavigator from "./app/navigation/TenantNavigator";
+import AppNavigator from "./app/navigation/AppNavigator";
 import { colors } from "./shared/theme";
 import { useFonts } from "expo-font";
 import { LoadingState, ErrorState } from "./components/common/FeedbackStates";
@@ -33,7 +33,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={theme}>
-        <TenantNavigator />
+        <AppNavigator />
         <StatusBar style="dark" />
       </NavigationContainer>
     </SafeAreaProvider>

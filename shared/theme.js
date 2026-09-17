@@ -14,6 +14,13 @@ const colors = {
   success: "#00BF98",
   successSoft: "#DDF4F1",
   danger: "#B42318",
+  dangerSoft: "#FFE2E5",
+  warning: "#A56300",
+  warningSoft: "#FFF8C2",
+  positive: "#00883B",
+  positiveSoft: "#DDFCE7",
+  info: "#2446A0",
+  infoSoft: "#EEF1FA",
 };
 
 module.exports = { colors };

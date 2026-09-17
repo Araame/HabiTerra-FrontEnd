@@ -9,7 +9,11 @@ import NearbyPlaceItem from "../../components/property/NearbyPlaceItem";
 import { colors } from "../../shared/theme";
 import { getProperty, nearbyPlaces } from "./tenantMocks";
 
-export default function LocationColocationScreen({ navigation, route }) {
+export default function LocationColocationScreen({
+  navigation,
+  route,
+  authenticated = false,
+}) {
   const property = getProperty(route.params?.propertyId);
   return (
     <ScreenLayout
@@ -27,7 +31,15 @@ export default function LocationColocationScreen({ navigation, route }) {
           title="Candidater"
           icon="arrow-forward"
           onPress={() =>
-            navigation.navigate("TenantAccount", { propertyId: property.id })
+            authenticated
+              ? navigation.navigate("TenantProfile", {
+                  propertyId: property.id,
+                  applicationFlow: true,
+                })
+              : navigation.navigate("Auth", {
+                  screen: "ProfileChoice",
+                  returnTo: { name: "Application", propertyId: property.id },
+                })
           }
         />
       }

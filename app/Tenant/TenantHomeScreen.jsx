@@ -18,7 +18,10 @@ import { EmptyState } from "../../components/common/FeedbackStates";
 import { colors } from "../../shared/theme";
 import { properties } from "./tenantMocks";
 
-export default function TenantHomeScreen({ navigation }) {
+export default function TenantHomeScreen({
+  navigation,
+  authenticated = false,
+}) {
   const [filter, setFilter] = useState("Tous");
   const [query, setQuery] = useState("");
   const visible = properties.filter(
@@ -77,15 +80,19 @@ export default function TenantHomeScreen({ navigation }) {
                     color={colors.text}
                   />
                 </Pressable>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => navigation.navigate("TenantAccount")}
-                  className="rounded-full bg-surface px-3 py-2 active:opacity-70"
-                >
-                  <Text className="font-semibold text-xs text-text">
-                    Connexion
-                  </Text>
-                </Pressable>
+                {!authenticated && (
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() =>
+                      navigation.navigate("Auth", { screen: "Login" })
+                    }
+                    className="rounded-full bg-surface px-3 py-2 active:opacity-70"
+                  >
+                    <Text className="font-semibold text-xs text-text">
+                      Connexion
+                    </Text>
+                  </Pressable>
+                )}
               </View>
               <Text className="font-bold text-[25px] leading-8 text-surface">
                 Trouvez votre{"\n"}logement idéal
