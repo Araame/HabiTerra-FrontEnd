@@ -20,7 +20,7 @@ console.log(
 
 const httpClient = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL?.trim().replace(/\/+$/, ""),
-  timeout: 15000,
+  timeout: 30000,
   headers: { Accept: "application/json", "Content-Type": "application/json" },
 });
 

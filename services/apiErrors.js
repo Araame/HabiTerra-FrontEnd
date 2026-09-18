@@ -10,6 +10,15 @@ export class ApiError extends Error {
 }
 
 const messages = {
+  PROPERTY_NOT_FOUND: "Bien introuvable.",
+  PROPERTY_NOT_PUBLISHABLE: "Ce bien ne peut pas être publié. Vérifiez ses informations et sa description (10 caractères minimum).",
+  PROPERTY_ACCESS_DENIED: "Vous n’avez pas accès à la gestion de ce bien.",
+  INVALID_PROPERTY: "Vérifiez les informations du bien.",
+  INVALID_SHARED_HOUSING: "Vérifiez la capacité de colocation.",
+  INVALID_PHOTO: "Photo invalide. Sélectionnez une image JPEG ou PNG respectant les limites du serveur.",
+  PHOTO_STORAGE_FAILED: "La photo n’a pas pu être enregistrée. Réessayez son envoi.",
+  DUPLICATE_APPLICATION: "Vous avez déjà candidaté à ce bien.",
+  INVALID_APPLICATION_STATUS: "Cette action n’est pas autorisée dans l’état actuel de la candidature.",
   BAD_CREDENTIALS: "Identifiant ou mot de passe incorrect.",
   ACCOUNT_SUSPENDED: "Votre compte est suspendu.",
   ACCOUNT_DISABLED: "Votre compte est désactivé.",
