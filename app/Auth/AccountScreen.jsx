@@ -1,55 +1,51 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useAuth } from "./AuthContext";
 import { Text } from "react-native";
 import ScreenLayout from "../../components/common/ScreenLayout";
 import ScreenHeader from "../../components/common/ScreenHeader";
 import FormField from "../../components/common/FormField";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import InfoCard from "../../components/common/InfoCard";
-import { roleOptions } from "../navigation/navigationConfig";
 
 export default function AccountScreen({
   navigation,
-  mode = "register",
-  role,
   returnTo,
 }) {
-  const login = mode === "login";
+  const { login: signIn } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const submitting = useRef(false);
   const [values, setValues] = useState({
-    name: "",
-    email: "",
-    phone: "",
     password: "",
+    identifier: "",
   });
-  const label = roleOptions.find((option) => option.value === role)?.label;
+  async function submit() {
+    if (submitting.current || !values.identifier.trim() || !values.password) return;
+    submitting.current = true;
+    setLoading(true);
+    setError(null);
+    try {
+      await signIn(values.identifier, values.password);
+    }
+    catch (failure) { setError(failure.message); }
+    finally { submitting.current = false; setLoading(false); }
+  }
   const fields = [
-    { key: "name", label: "Nom complet", autoComplete: "name" },
-    {
-      key: "phone",
-      label: "Téléphone",
-      keyboardType: "phone-pad",
-      autoComplete: "tel",
-    },
-    {
-      key: "email",
-      label: "Email",
-      keyboardType: "email-address",
-      autoCapitalize: "none",
-      autoComplete: "email",
-    },
+    { key: "identifier", label: "Email ou téléphone", autoCapitalize: "none", autoComplete: "username", autoCorrect: false },
     {
       key: "password",
       label: "Mot de passe",
       secureTextEntry: true,
       autoCapitalize: "none",
-      autoComplete: login ? "current-password" : "new-password",
+      autoComplete: "current-password",
     },
-  ].filter(({ key }) => !login || ["email", "password"].includes(key));
+  ];
   return (
     <ScreenLayout
       header={
         <ScreenHeader
-          title={login ? "Connexion" : `Inscription ${label}`}
-          onBack={() => navigation.goBack()}
+          title="Connexion"
+          onBack={navigation.canGoBack() ? () => navigation.goBack() : undefined}
         />
       }
     >
@@ -62,31 +58,26 @@ export default function AccountScreen({
       <InfoCard
         variant="neutral"
         icon="information-circle-outline"
-        description={
-          login
-            ? "La connexion au service d’authentification n’est pas encore disponible."
-            : "Formulaire préparatoire : l’inscription et les informations spécifiques à votre profil seront complétées lors de l’intégration du service."
-        }
+        description="Connectez-vous avec votre email ou votre numéro de téléphone."
       />
       {fields.map(({ key, ...field }) => (
         <FormField
           key={key}
           {...field}
+          disabled={loading}
           value={values[key]}
           onChangeText={(value) => setValues({ ...values, [key]: value })}
         />
       ))}
+      {error && <Text accessibilityRole="alert" className="font-sans text-sm text-danger">{error}</Text>}
       <PrimaryButton
-        title={login ? "Se connecter" : "Créer mon compte"}
-        disabled
+        title="Se connecter"
+        disabled={!values.identifier.trim() || !values.password}
+        loading={loading}
+        onPress={submit}
       />
-      {__DEV__ && !login && (
-        <PrimaryButton
-          title="Prévisualiser la vérification"
-          variant="outline"
-          onPress={() => navigation.navigate("Verification")}
-        />
-      )}
+      <PrimaryButton title="Créer un compte" variant="outline" disabled={loading}
+        onPress={() => navigation.navigate("ProfileChoice")} />
       {__DEV__ && returnTo?.propertyId && (
         <PrimaryButton
           title="Prévisualiser la candidature sans connexion"

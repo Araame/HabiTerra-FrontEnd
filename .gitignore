@@ -36,6 +36,7 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
 
 # typescript
@@ -46,3 +47,8 @@ design-ref
 /ios
 /android
 
+
+scripts
+!scripts/
+scripts/*
+!scripts/check-registration.cjs

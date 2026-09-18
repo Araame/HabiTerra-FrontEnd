@@ -105,7 +105,7 @@ export default function AgencyNavigator() {
       screenOptions={{ headerShown: false }}
       tabBar={(props) => <BottomBar {...props} />}
     >
-      {navigationConfig.AGENCE.map(({ name, label, icon }) => (
+      {navigationConfig.GERANT_AGENCE.map(({ name, label, icon }) => (
         <Tab.Screen
           key={name}
           name={name}

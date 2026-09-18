@@ -6,7 +6,7 @@ export const navigationConfig = {
     { name: "Lease", label: "Mon bail", icon: "document-text-outline" },
     { name: "Profile", label: "Profil", icon: "person-outline" },
   ],
-  AGENCE: [
+  GERANT_AGENCE: [
     { name: "AgencyHome", label: "Accueil", icon: "home-outline" },
     { name: "AgencyProperties", label: "Biens", icon: "business-outline" },
     { name: "AgencyFinance", label: "Finance", icon: "wallet-outline" },
@@ -18,5 +18,5 @@ export const navigationConfig = {
 export const roleOptions = [
   { value: "LOCATAIRE", label: "Locataire", icon: "person-outline" },
   { value: "PROPRIETAIRE", label: "Propriétaire", icon: "home-outline" },
-  { value: "AGENCE", label: "Agence", icon: "business-outline" },
+  { value: "GERANT_AGENCE", label: "Agence", icon: "business-outline" },
 ];

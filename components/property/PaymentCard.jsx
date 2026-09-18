@@ -1,12 +1,8 @@
 import { Pressable, Text, View } from "react-native";
 import StatusBadge from "../common/StatusBadge";
 
-export default function PaymentCard({
-  payment,
-  onOpenDossier,
-  onRemind,
-  compact = false,
-}) {
+// Payment card component
+export default function PaymentCard({payment, onOpenDossier, onRemind, compact = false,}) {
   return (
     <View className="gap-3 rounded-[20px] bg-surface p-4 shadow-sm">
       <View className="flex-row justify-between gap-2">
@@ -36,19 +32,14 @@ export default function PaymentCard({
             <Pressable
               accessibilityRole="button"
               onPress={onRemind}
-              className="rounded-full bg-secondary px-3 py-2"
-            >
+              className="rounded-full bg-secondary px-3 py-2">
               <Text className="font-semibold text-sm text-primary">
                 Relancer
               </Text>
             </Pressable>
           )}
           {onOpenDossier && (
-            <Pressable
-              accessibilityRole="button"
-              onPress={onOpenDossier}
-              className="py-2"
-            >
+            <Pressable accessibilityRole="button" onPress={onOpenDossier} className="py-2">
               <Text className="font-medium text-sm text-muted">Dossier</Text>
             </Pressable>
           )}

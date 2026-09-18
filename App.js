@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppNavigator from "./app/navigation/AppNavigator";
+import { AuthProvider } from "./app/Auth/AuthContext";
 import { colors } from "./shared/theme";
 import { useFonts } from "expo-font";
 import { LoadingState, ErrorState } from "./components/common/FeedbackStates";
@@ -32,10 +33,12 @@ export default function App() {
   if (!fontsLoaded) return <LoadingState />;
   return (
     <SafeAreaProvider>
+      <AuthProvider>
       <NavigationContainer theme={theme}>
         <AppNavigator />
         <StatusBar style="dark" />
       </NavigationContainer>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }

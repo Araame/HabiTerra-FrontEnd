@@ -145,7 +145,10 @@ for (const entries of Object.values(navigationConfig)) {
 }
 
 const stack = { Navigator: "Navigator", Screen: "Screen", Group: "Group" };
+let authState = {};
 const appMocks = {
+  "../Auth/AuthContext": { useAuth: () => authState },
+  "../../components/common/LogoutButton": "LogoutButton",
   "@react-navigation/native-stack": { createNativeStackNavigator: () => stack },
   "react-native": native,
   "./AuthNavigator": "AuthNavigator",
@@ -171,10 +174,12 @@ for (const development of [false, true]) {
   );
   for (const [role, expected] of [
     ["LOCATAIRE", "TenantNavigator"],
-    ["AGENCE", "AgencyNavigator"],
+    ["GERANT_AGENCE", "AgencyNavigator"],
     ["PROPRIETAIRE", "View"],
-    ["UNKNOWN", "ErrorState"],
+    ["ADMIN", "View"],
+    ["UNKNOWN", "View"],
   ]) {
+    authState = { user: { id: "test", role } };
     const authenticated = elements(
       AppNavigator({ session: { user: { id: "test", role } } }),
     );
@@ -189,6 +194,7 @@ for (const development of [false, true]) {
     const roleElement = screen.props.children();
     assert.equal(roleElement.type(roleElement.props).type, expected);
   }
+  authState = {};
 }
 
 // Use React Navigation's actual routers to verify tab history and stack Back.
@@ -196,7 +202,7 @@ async function checkRouters() {
   const { TabRouter, StackRouter, CommonActions, StackActions } = await import(
     "@react-navigation/routers"
   );
-  const routeNames = navigationConfig.AGENCE.map((tab) => tab.name);
+  const routeNames = navigationConfig.GERANT_AGENCE.map((tab) => tab.name);
   const options = { routeNames, routeParamList: {}, routeGetIdList: {} };
   const router = TabRouter({ backBehavior: "history" });
   let state = router.getInitialState(options);

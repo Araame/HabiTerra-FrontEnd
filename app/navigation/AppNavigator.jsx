@@ -3,7 +3,9 @@ import { View } from "react-native";
 import AuthNavigator from "./AuthNavigator";
 import TenantNavigator from "./TenantNavigator";
 import AgencyNavigator from "./AgencyNavigator";
-import { EmptyState, ErrorState } from "../../components/common/FeedbackStates";
+import { EmptyState, ErrorState, LoadingState } from "../../components/common/FeedbackStates";
+import { useAuth } from "../Auth/AuthContext";
+import LogoutButton from "../../components/common/LogoutButton";
 import { roleOptions } from "./navigationConfig";
 
 const Stack = createNativeStackNavigator();
@@ -14,7 +16,7 @@ function RoleNavigator({ role, authenticated = false }) {
   if (role === "LOCATAIRE")
     return <TenantNavigator authenticated={authenticated} />;
   // Agency section
-  if (role === "AGENCE") return <AgencyNavigator />;
+  if (role === "GERANT_AGENCE") return <AgencyNavigator />;
   // Owner section
   if (role === "PROPRIETAIRE") {
     return (
@@ -23,24 +25,36 @@ function RoleNavigator({ role, authenticated = false }) {
           title="Espace Propriétaire"
           description="Ce parcours n’est pas encore intégré."
         />
+        <LogoutButton />
       </View>
     );
   }
   return (
-    <ErrorState message="Le rôle associé à la session n’est pas reconnu." />
+    <View className="flex-1 bg-background">
+      <ErrorState message={role === "ADMIN" ? "Profil administrateur non pris en charge." : "Le rôle associé à la session n’est pas reconnu."} />
+      <LogoutButton />
+    </View>
   );
 }
 
-// session doit provenir de l’authentification serveur, jamais du choix d’inscription.
-export default function AppNavigator({ session = null }) {
+
+export default function AppNavigator() {
+  const { user, isRestoring, restoreError, restoreSession } = useAuth();
+  if (isRestoring) return <LoadingState message="Restauration de votre session…" />;
+  if (restoreError) return (
+    <View className="flex-1 bg-background">
+      <ErrorState message={restoreError.message} onRetry={restoreSession} />
+      <LogoutButton allowUnrestored />
+    </View>
+  );
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {session?.user ? (
+      {user ? (
         <Stack.Screen
           name="Authenticated"
-          navigationKey={`${session.user.id}:${session.user.role}`}
+          navigationKey={`${user.id}:${user.role}`}
         >
-          {() => <RoleNavigator role={session.user.role} authenticated />}
+          {() => <RoleNavigator role={user.role} authenticated />}
         </Stack.Screen>
       ) : (
         <Stack.Group navigationKey="guest">

@@ -6,6 +6,7 @@ import Avatar from "../../components/common/Avatar";
 import FormField from "../../components/common/FormField";
 import PrimaryButton from "../../components/common/PrimaryButton";
 import { demoProfile } from "./tenantMocks";
+import LogoutButton from "../../components/common/LogoutButton";
 
 export default function TenantProfileScreen({ navigation, route }) {
   const [profile, setProfile] = useState({ ...demoProfile });
@@ -69,6 +70,7 @@ export default function TenantProfileScreen({ navigation, route }) {
           onChangeText={(value) => setProfile({ ...profile, [key]: value })}
         />
       ))}
+      <LogoutButton />
     </ScreenLayout>
   );
 }

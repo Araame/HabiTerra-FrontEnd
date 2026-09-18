@@ -43,13 +43,14 @@ export default function ProfileChoiceScreen({
         </Pressable>
       ))}
       <PrimaryButton
-        title="Créer un compte"
-        onPress={() => navigation.navigate("Register")}
+        title="Continuer"
+        disabled={!selectedRole}
+        onPress={() => navigation.navigate("Identifier")}
       />
       <PrimaryButton
         title="J’ai déjà un compte"
         variant="outline"
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => navigation.popTo("Login")}
       />
       {__DEV__ && (
         <View className="gap-2 border-t border-border pt-5">

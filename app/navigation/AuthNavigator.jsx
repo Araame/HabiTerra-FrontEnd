@@ -1,43 +1,44 @@
-import { useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProfileChoiceScreen from "../Auth/ProfileChoiceScreen";
 import AccountScreen from "../Auth/AccountScreen";
 import VerificationScreen from "../Auth/VerificationScreen";
-import ActivationScreen from "../Auth/ActivationScreen";
+import IdentifierScreen from "../Auth/IdentifierScreen";
+import CompleteProfileScreen from "../Auth/CompleteProfileScreen";
+import { useAuth } from "../Auth/AuthContext";
+import useRegistrationFlow from "../Auth/useRegistrationFlow";
 
 const Stack = createNativeStackNavigator();
 
 // Auth Navigation component
 export default function AuthNavigator({ route }) {
-  const [selectedRole, setSelectedRole] = useState("LOCATAIRE");
+  const { establishSession } = useAuth();
+  const registration = useRegistrationFlow(establishSession);
   // Back to button
   const returnTo = route.params?.returnTo;
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Login" listeners={{ focus: registration.reset }}>
+        {(props) => <AccountScreen {...props} returnTo={returnTo} />}
+      </Stack.Screen>
       <Stack.Screen name="ProfileChoice">
         {(props) => (
           <ProfileChoiceScreen
             {...props}
-            selectedRole={selectedRole}
-            onSelectRole={setSelectedRole}
+            selectedRole={registration.registration.role}
+            onSelectRole={registration.selectRole}
           />
         )}
       </Stack.Screen>
-      <Stack.Screen name="Register">
+      <Stack.Screen name="Identifier" listeners={{ blur: registration.cancelPending }}>
         {(props) => (
-          <AccountScreen {...props} role={selectedRole} returnTo={returnTo} />
+          <IdentifierScreen {...props} flow={registration} />
         )}
       </Stack.Screen>
-      <Stack.Screen name="Login">
-        {(props) => (
-          <AccountScreen {...props} mode="login" returnTo={returnTo} />
-        )}
+      <Stack.Screen name="Verification" listeners={{ blur: registration.cancelPending }}>
+        {(props) => <VerificationScreen {...props} flow={registration} />}
       </Stack.Screen>
-      <Stack.Screen name="Verification">
-        {(props) => <VerificationScreen {...props} role={selectedRole} />}
-      </Stack.Screen>
-      <Stack.Screen name="Activation">
-        {(props) => <ActivationScreen {...props} role={selectedRole} />}
+      <Stack.Screen name="CompleteProfile" listeners={{ blur: registration.cancelPending }}>
+        {(props) => <CompleteProfileScreen {...props} flow={registration} />}
       </Stack.Screen>
     </Stack.Navigator>
   );

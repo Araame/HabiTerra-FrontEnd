@@ -1,6 +1,7 @@
 import ScreenLayout from "../../components/common/ScreenLayout";
 import ScreenHeader from "../../components/common/ScreenHeader";
 import { EmptyState } from "../../components/common/FeedbackStates";
+import LogoutButton from "../../components/common/LogoutButton";
 
 const content = {
   Landlords: [
@@ -39,6 +40,7 @@ export default function AgencyPendingScreen({ navigation, route }) {
       }
     >
       <EmptyState title={title} description={description} />
+      {route.name === "AgencyProfile" && <LogoutButton />}
     </ScreenLayout>
   );
 }
